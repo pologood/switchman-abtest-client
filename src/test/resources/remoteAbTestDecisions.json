@@ -1,0 +1,7 @@
+{
+    "_links": {
+        "search": {
+            "href": "http://microservice.abtest.test/api/abTestDecisions/search"
+        }
+    }
+}

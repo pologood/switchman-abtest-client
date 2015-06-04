@@ -1,0 +1,26 @@
+{
+    "_embedded" : {
+        "abTestDecisions" : [ {
+            "id" : "existing_decision",
+            "userSsoId" : "1",
+            "testName" : "test",
+            "variantId" : 2,
+            "_links" : {
+                "self" : {
+                    "href" : "http://microservice.abtest.test/api/abTestDecisions/existing_decision"
+                }
+            }
+        },
+            {
+                "id" : "5382f3b9e4b087993bda31ff",
+                "userSsoId" : "1",
+                "testName" : "bspw",
+                "variantId" : 1,
+                "_links" : {
+                    "self" : {
+                        "href" : "http://microservice.abtest.test/api/abTestDecisions/5382f3b9e4b087993bda31ff"
+                    }
+                }
+            }]
+    }
+}

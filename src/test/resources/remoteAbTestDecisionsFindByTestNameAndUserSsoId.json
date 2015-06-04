@@ -1,0 +1,15 @@
+{
+    "_embedded" : {
+        "abTestDecisions" : [ {
+            "id" : "existing_decision",
+            "userSsoId" : "1",
+            "testName" : "test",
+            "variantId" : 2,
+            "_links" : {
+                "self" : {
+                    "href" : "http://microservice.abtest.test/api/abTestDecisions/existing_decision"
+                }
+            }
+        } ]
+    }
+}

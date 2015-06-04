@@ -1,0 +1,12 @@
+{
+    "_links": {
+        "findByTestNameAndUserSsoId": {
+            "href": "http://microservice.abtest.test/api/abTestDecisions/search/findByTestNameAndUserSsoId{?testName,userSsoId}",
+            "templated": true
+        },
+        "findByUserSsoId": {
+            "href": "http://microservice.abtest.test/api/abTestDecisions/search/findByUserSsoId{?userSsoId}",
+            "templated": true
+        }
+    }
+}

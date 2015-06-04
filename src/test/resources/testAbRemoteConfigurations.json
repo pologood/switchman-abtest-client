@@ -1,0 +1,57 @@
+{
+  "_links": {
+    "search": {
+      "href": "http://microservice.abtest.test/api/abTestConfigurations/search"
+    }
+  },
+  "_embedded": {
+    "abTestConfigurations": [
+      {
+        "name": "test",
+        "from": "2014-03-01T12:37:00.989+01:00",
+        "to": "2050-07-31T23:00:00.989+01:00",
+        "variants": [
+          {
+            "id": 0,
+            "description": "Variante 1",
+            "weight": 50
+          },
+          {
+            "id": 1,
+            "description": "Variante 2",
+            "weight": 50
+          }
+        ],
+        "id": "test",
+        "_links": {
+          "self": {
+            "href": "http://microservice.abtest.test/api/abTestConfigurations/test"
+          }
+        }
+      },
+      {
+        "name": "bspw",
+        "from": "2000-01-01T00:00:00.989+01:00",
+        "to": "2200-07-30T23:00:00.989+01:00",
+        "variants": [
+          {
+            "id": 0,
+            "description": "Variante 1",
+            "weight": 50
+          },
+          {
+            "id": 1,
+            "description": "Variante 2",
+            "weight": 50
+          }
+        ],
+        "id": "bspw",
+        "_links": {
+          "self": {
+            "href": "http://microservice.abtest.test/api/abTestConfigurations/bspw"
+          }
+        }
+      }
+    ]
+  }
+}
