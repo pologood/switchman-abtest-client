@@ -9,5 +9,6 @@
 ```
 # IS24 Switchman AB Test Client
 [![Build Status](https://api.travis-ci.org/ImmobilienScout24/switchman-abtest-client.svg?branch=master)](https://travis-ci.org/ImmobilienScout24/switchman-abtest-client)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.is24.common/switchman-abtest-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.is24.common/switchman-abtest-client/)
 
 A client to use IS24 switchman for reading and storing AB test configurations and decisions.
