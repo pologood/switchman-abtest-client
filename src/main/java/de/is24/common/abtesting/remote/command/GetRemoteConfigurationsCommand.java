@@ -12,26 +12,39 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
+
 import java.util.Collections;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 
 public class GetRemoteConfigurationsCommand
   extends AbstractAbTestRemoteCommand<Resources<Resource<AbTestConfiguration>>> {
   private static final Logger LOGGER = LoggerFactory.getLogger(GetRemoteConfigurationsCommand.class);
   private final String remoteApiUri;
+  private final Map<Parameters, String> parameterMap;
 
-  public GetRemoteConfigurationsCommand(HystrixConfiguration hysterixConfiguration, RestOperations restOperations,
-                                        HateoasLinkProvider hateoasLinkProvider,
-                                        String remoteConfigurationProviderUri) {
+  public GetRemoteConfigurationsCommand(final HystrixConfiguration hysterixConfiguration,
+                                        final RestOperations restOperations,
+                                        final HateoasLinkProvider hateoasLinkProvider,
+                                        final String remoteConfigurationProviderUri,
+                                        final Map<Parameters, String> parameterMap) {
     super(hysterixConfiguration.getConfiguration(COMMAND_GROUP_KEY), restOperations, hateoasLinkProvider);
     this.remoteApiUri = remoteConfigurationProviderUri;
+    this.parameterMap = parameterMap;
   }
 
   @Override
-  protected Resources<Resource<AbTestConfiguration>> runCommand() throws Exception {
-    Link linkToConfigurations = getLinkByName(remoteApiUri, AbTestConfiguration.REL).expand();
+  protected Resources<Resource<AbTestConfiguration>> runCommand() throws RestClientException {
+    final Map<String, String> stringMap =
+        parameterMap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toString(), Entry::getValue));
 
+    Link linkToConfigurations = getLinkByName(remoteApiUri, AbTestConfiguration.REL).expand(stringMap);
+
+    LOGGER.info(parameterMap.toString());
     ResponseEntity<Resources<Resource<AbTestConfiguration>>> responseEntity = restOperations.exchange(
       linkToConfigurations.getHref(),
       HttpMethod.GET,
@@ -43,11 +56,30 @@ public class GetRemoteConfigurationsCommand
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   protected Resources<Resource<AbTestConfiguration>> getFallback() {
     LOGGER.warn(
       "No configuration could be retrieved. Using empty remote configuration.",
       this.getFailedExecutionException());
-    return new Resources<Resource<AbTestConfiguration>>((Iterable) Collections.emptyList(),
-      (Iterable) Collections.emptyList());
+
+    return new Resources<>((Iterable) Collections.emptyList(),
+        (Iterable) Collections.emptyList());
+  }
+
+  public enum Parameters {
+    SIZE("size"),
+    PAGE("page"),
+    SORT("sort");
+
+    private final String parameterName;
+
+    Parameters(final String parameterName) {
+      this.parameterName = parameterName;
+    }
+
+    @Override
+    public String toString() {
+      return this.parameterName;
+    }
   }
 }

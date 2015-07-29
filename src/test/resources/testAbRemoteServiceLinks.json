@@ -1,10 +1,10 @@
 {
   "_links" : {
     "abTestDecisions" : {
-      "href" : "http://microservice.abtest.test/api/abTestDecisions"
+      "href": "http://microservice.abtest.test/api/abTestDecisions{?page,size,sort}"
     },
     "abTestConfigurations" : {
-      "href" : "http://microservice.abtest.test/api/abTestConfigurations"
+      "href": "http://microservice.abtest.test/api/abTestConfigurations{?page,size,sort}"
     }
   }
 }

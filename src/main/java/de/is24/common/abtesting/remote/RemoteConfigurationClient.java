@@ -4,13 +4,16 @@ import de.is24.common.abtesting.remote.api.AbTestConfiguration;
 import de.is24.common.abtesting.remote.command.CreateRemoteConfigurationCommand;
 import de.is24.common.abtesting.remote.command.DeleteRemoteConfigurationCommand;
 import de.is24.common.abtesting.remote.command.GetRemoteConfigurationsCommand;
+import de.is24.common.abtesting.remote.command.GetRemoteConfigurationsCommand.Parameters;
 import de.is24.common.abtesting.remote.command.UpdateRemoteConfigurationCommand;
 import de.is24.common.hateoas.HateoasLinkProvider;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestOperations;
+
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -21,16 +24,20 @@ public class RemoteConfigurationClient extends AbTestRemoteClient {
   }
 
   public Map<String, AbTestConfiguration> getRemoteConfiguration() {
-    Resources<Resource<AbTestConfiguration>> abTestConfigurationResources =
+    return getRemoteConfiguration(new HashMap<>());
+  }
+
+  public Map<String, AbTestConfiguration> getRemoteConfiguration(final Map<Parameters, String> parameterMap) {
+    final Resources<Resource<AbTestConfiguration>> abTestConfigurationResources =
       new GetRemoteConfigurationsCommand(hysterixConfiguration,
         restOperations,
         hateoasLinkProvider,
-        remoteServiceBaseUri).execute();
+          remoteServiceBaseUri, parameterMap).execute();
 
 
-    Map<String, AbTestConfiguration> fromApi = new HashMap<>();
+    final Map<String, AbTestConfiguration> fromApi = new LinkedHashMap<>();
     for (Resource<AbTestConfiguration> remoteConfiguration : abTestConfigurationResources) {
-      AbTestConfiguration abTestConfiguration = remoteConfiguration.getContent();
+      final AbTestConfiguration abTestConfiguration = remoteConfiguration.getContent();
       fromApi.put(abTestConfiguration.getName(), abTestConfiguration);
     }
     return fromApi;
