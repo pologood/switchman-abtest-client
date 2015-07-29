@@ -4,7 +4,8 @@ import de.is24.common.abtesting.remote.api.AbTestConfiguration;
 import de.is24.common.abtesting.remote.command.CreateRemoteConfigurationCommand;
 import de.is24.common.abtesting.remote.command.DeleteRemoteConfigurationCommand;
 import de.is24.common.abtesting.remote.command.GetRemoteConfigurationsCommand;
-import de.is24.common.abtesting.remote.command.GetRemoteConfigurationsCommand.Parameters;
+import de.is24.common.abtesting.remote.command.PageableParameters;
+import de.is24.common.abtesting.remote.command.SearchRemoteConfigurationsByNamePrefixCommand;
 import de.is24.common.abtesting.remote.command.UpdateRemoteConfigurationCommand;
 import de.is24.common.hateoas.HateoasLinkProvider;
 import org.springframework.hateoas.Resource;
@@ -27,12 +28,32 @@ public class RemoteConfigurationClient extends AbTestRemoteClient {
     return getRemoteConfiguration(new HashMap<>());
   }
 
-  public Map<String, AbTestConfiguration> getRemoteConfiguration(final Map<Parameters, String> parameterMap) {
+  public Map<String, AbTestConfiguration> getRemoteConfiguration(final Map<PageableParameters, String> parameterMap) {
     final Resources<Resource<AbTestConfiguration>> abTestConfigurationResources =
-      new GetRemoteConfigurationsCommand(hysterixConfiguration,
-        restOperations,
-        hateoasLinkProvider,
-          remoteServiceBaseUri, parameterMap).execute();
+        new GetRemoteConfigurationsCommand(hysterixConfiguration,
+            restOperations,
+            hateoasLinkProvider,
+            remoteServiceBaseUri,
+            parameterMap).execute();
+
+
+    final Map<String, AbTestConfiguration> fromApi = new LinkedHashMap<>();
+    for (Resource<AbTestConfiguration> remoteConfiguration : abTestConfigurationResources) {
+      final AbTestConfiguration abTestConfiguration = remoteConfiguration.getContent();
+      fromApi.put(abTestConfiguration.getName(), abTestConfiguration);
+    }
+    return fromApi;
+  }
+
+  public Map<String, AbTestConfiguration> searchByNamePrefix(final Map<PageableParameters, String> parameterMap,
+                                                             final String prefix) {
+    final Resources<Resource<AbTestConfiguration>> abTestConfigurationResources =
+        new SearchRemoteConfigurationsByNamePrefixCommand(hysterixConfiguration,
+            restOperations,
+            hateoasLinkProvider,
+            remoteServiceBaseUri,
+            parameterMap,
+            prefix).execute();
 
 
     final Map<String, AbTestConfiguration> fromApi = new LinkedHashMap<>();
@@ -45,28 +66,28 @@ public class RemoteConfigurationClient extends AbTestRemoteClient {
 
   public HttpStatus createRemoteConfiguration(AbTestConfiguration testConfiguration) {
     HttpStatus answerFromApi = new CreateRemoteConfigurationCommand(hysterixConfiguration,
-      restOperations,
-      hateoasLinkProvider,
-      remoteServiceBaseUri,
-      testConfiguration).execute();
+        restOperations,
+        hateoasLinkProvider,
+        remoteServiceBaseUri,
+        testConfiguration).execute();
     return answerFromApi;
   }
 
   public HttpStatus deleteRemoteConfiguration(AbTestConfiguration testConfiguration) {
     HttpStatus answerFromApi = new DeleteRemoteConfigurationCommand(hysterixConfiguration,
-      restOperations,
-      hateoasLinkProvider,
-      remoteServiceBaseUri,
-      testConfiguration).execute();
+        restOperations,
+        hateoasLinkProvider,
+        remoteServiceBaseUri,
+        testConfiguration).execute();
     return answerFromApi;
   }
 
   public HttpStatus updateRemoteConfiguration(AbTestConfiguration abTestConfiguration) {
     HttpStatus answerFromApi = new UpdateRemoteConfigurationCommand(hysterixConfiguration,
-      restOperations,
-      hateoasLinkProvider,
-      remoteServiceBaseUri,
-      abTestConfiguration).execute();
+        restOperations,
+        hateoasLinkProvider,
+        remoteServiceBaseUri,
+        abTestConfiguration).execute();
     return answerFromApi;
   }
 

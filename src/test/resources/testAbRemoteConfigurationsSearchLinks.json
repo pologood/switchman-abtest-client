@@ -1,0 +1,12 @@
+{
+  "_links": {
+    "findByNameStartsWith": {
+      "href": "http://microservice.abtest.test/api/abTestConfigurations/search/findByNameStartsWith{?prefix,page,size,sort}",
+      "templated": true
+    },
+    "findByName": {
+      "href": "http://microservice.abtest.test/api/abTestConfigurations/search/findByName{?name}",
+      "templated": true
+    }
+  }
+}                                                                                 

@@ -25,13 +25,13 @@ public class GetRemoteConfigurationsCommand
   extends AbstractAbTestRemoteCommand<Resources<Resource<AbTestConfiguration>>> {
   private static final Logger LOGGER = LoggerFactory.getLogger(GetRemoteConfigurationsCommand.class);
   private final String remoteApiUri;
-  private final Map<Parameters, String> parameterMap;
+  private final Map<PageableParameters, String> parameterMap;
 
   public GetRemoteConfigurationsCommand(final HystrixConfiguration hysterixConfiguration,
                                         final RestOperations restOperations,
                                         final HateoasLinkProvider hateoasLinkProvider,
                                         final String remoteConfigurationProviderUri,
-                                        final Map<Parameters, String> parameterMap) {
+                                        final Map<PageableParameters, String> parameterMap) {
     super(hysterixConfiguration.getConfiguration(COMMAND_GROUP_KEY), restOperations, hateoasLinkProvider);
     this.remoteApiUri = remoteConfigurationProviderUri;
     this.parameterMap = parameterMap;
@@ -66,20 +66,4 @@ public class GetRemoteConfigurationsCommand
         (Iterable) Collections.emptyList());
   }
 
-  public enum Parameters {
-    SIZE("size"),
-    PAGE("page"),
-    SORT("sort");
-
-    private final String parameterName;
-
-    Parameters(final String parameterName) {
-      this.parameterName = parameterName;
-    }
-
-    @Override
-    public String toString() {
-      return this.parameterName;
-    }
-  }
 }

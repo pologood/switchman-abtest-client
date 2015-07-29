@@ -1,7 +1,7 @@
 package de.is24.common.abtesting.remote;
 
 import de.is24.common.abtesting.remote.api.AbTestConfiguration;
-import de.is24.common.abtesting.remote.command.GetRemoteConfigurationsCommand.Parameters;
+import de.is24.common.abtesting.remote.command.PageableParameters;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -16,6 +16,7 @@ import static org.hamcrest.core.Is.is;
 
 
 public class RemoteConfigurationClientTest extends RemoteClientTest {
+  private static final String PREFIX = "Test";
   private Map<String, AbTestConfiguration> remoteConfigurations;
   private HttpStatus returnStatus;
 
@@ -29,12 +30,23 @@ public class RemoteConfigurationClientTest extends RemoteClientTest {
   @Test
   public void shouldLoadParametrizedRemoteConfigurations() throws IOException {
     givenRemoteConfigurations("page=1&size=5&sort=from,desc");
-    final Map<Parameters, String> params = new HashMap<>();
-    params.put(Parameters.SIZE, "5");
-    params.put(Parameters.PAGE, "1");
-    params.put(Parameters.SORT, "from,desc");
+    final Map<PageableParameters, String> params = new HashMap<>();
+    params.put(PageableParameters.SIZE, "5");
+    params.put(PageableParameters.PAGE, "1");
+    params.put(PageableParameters.SORT, "from,desc");
     whenLoadingParametrizedRemoteConfigurations(params);
     thenAllRemoteConfigurationsWhereLoaded();
+  }
+
+  @Test
+  public void shouldSearchByPrefixRemoteConfigurations() throws IOException {
+    givenRemoteConfigurationsWithPrefix("page=1&size=5&sort=from,desc", PREFIX);
+    final Map<PageableParameters, String> params = new HashMap<>();
+    params.put(PageableParameters.SIZE, "5");
+    params.put(PageableParameters.PAGE, "1");
+    params.put(PageableParameters.SORT, "from,desc");
+    whenSearchingWithPrefixRemoteConfigurations(params, PREFIX);
+    thenSearchResultsWereLoaded();
   }
 
   @Test
@@ -79,17 +91,33 @@ public class RemoteConfigurationClientTest extends RemoteClientTest {
         "/testAbRemoteConfigurations.json");
   }
 
+  private void givenRemoteConfigurationsWithPrefix(final String parameters, final String prefix) throws IOException {
+    expectServerToReturn(REMOTE_BASE_SERVICE_URI + "/abTestConfigurations/search", "/testAbRemoteConfigurationsSearchLinks.json");
+    expectServerToReturn(REMOTE_BASE_SERVICE_URI + "/abTestConfigurations/search/findByNameStartsWith?prefix=" + prefix + (parameters != null ? "&" + parameters : ""),
+        "/testAbRemoteConfigurationsWithPrefix.json");
+  }
+
   private void whenLoadingRemoteConfigurations() {
     remoteConfigurations = setupRemoteConfigurationClient().getRemoteConfiguration();
   }
 
-  private void whenLoadingParametrizedRemoteConfigurations(final Map<Parameters, String> params) {
+  private void whenLoadingParametrizedRemoteConfigurations(final Map<PageableParameters, String> params) {
     remoteConfigurations = setupRemoteConfigurationClient().getRemoteConfiguration(params);
+  }
+
+  private void whenSearchingWithPrefixRemoteConfigurations(final Map<PageableParameters, String> params, final String prefix) {
+    remoteConfigurations = setupRemoteConfigurationClient().searchByNamePrefix(params, prefix);
   }
 
   private void thenAllRemoteConfigurationsWhereLoaded() {
     mockedRestServer.verify();
     assertThat(remoteConfigurations.keySet(), hasSize(2));
   }
+
+  private void thenSearchResultsWereLoaded() {
+    mockedRestServer.verify();
+    assertThat(remoteConfigurations.keySet(), hasSize(3));
+  }
+
 
 }

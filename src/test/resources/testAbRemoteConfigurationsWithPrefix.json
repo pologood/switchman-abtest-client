@@ -1,0 +1,69 @@
+{
+  "_embedded": {
+    "abTestConfigurations": [
+      {
+        "name": "Test1",
+        "from": "2015-07-29T00:00:00.000+02:00",
+        "to": "2015-07-30T00:00:00.000+02:00",
+        "abTestStorageType": "DB",
+        "variants": [
+          {
+            "id": 0,
+            "description": "",
+            "weight": 1
+          }
+        ],
+        "created": null,
+        "modified": "2015-07-29T09:40:27.086+02:00",
+        "active": true,
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/api/abTestConfigurations/Test1"
+          }
+        }
+      },
+      {
+        "name": "Test2",
+        "from": "2015-07-29T00:00:00.000+02:00",
+        "to": "2015-07-31T00:00:00.000+02:00",
+        "abTestStorageType": "DB",
+        "variants": [
+          {
+            "id": 0,
+            "description": "",
+            "weight": 1
+          }
+        ],
+        "created": null,
+        "modified": "2015-07-29T09:40:41.279+02:00",
+        "active": true,
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/api/abTestConfigurations/Test2"
+          }
+        }
+      },
+      {
+        "name": "Test3",
+        "from": "2015-07-30T00:00:00.000+02:00",
+        "to": "2015-08-01T00:00:00.000+02:00",
+        "abTestStorageType": "DB",
+        "variants": [
+          {
+            "id": 0,
+            "description": "",
+            "weight": 1
+          }
+        ],
+        "created": null,
+        "modified": "2015-07-29T09:40:41.279+02:00",
+        "active": true,
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/api/abTestConfigurations/Test3"
+          }
+        }
+      }
+    ]
+  }
+}
